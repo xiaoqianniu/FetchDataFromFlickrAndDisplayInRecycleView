@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -113,30 +114,33 @@ public class MainActivity extends AppCompatActivity {
                 JSONParser jsonParser = new JSONParser();
 
                 Owner owner = jsonParser.parseOwnerInfo(response);
-                System.out.println(".................." + owner);
 
                 if (owner != null) {
                     // Retrieve the author name and author portrait URL from the parsed Owner object
-                    String authorName = owner.getAuthorName();
+                    String authorName = owner.getDisplayName();
                     String authorPortraitUrl = owner.getAuthorPortraitUrl();
+
+                    System.out.println("author name ///////////"+ authorName);
 
                     // Update the corresponding views with the retrieved information
                     author_name.setText(authorName);
-                    Picasso.get()
-                            .load(authorPortraitUrl)
-                            .placeholder(R.drawable.placeholderimage)
-                            .into(author_portrait);
-                    System.out.println("success to parse owner information");
+                    if (authorPortraitUrl != null) {
+                        Picasso.get()
+                                .load(authorPortraitUrl)
+                                .placeholder(R.drawable.placeholderimage)
+                                .transform(new CircleTransform())
+                                .into(author_portrait);
+
+                    } else {
+                        author_portrait.setImageResource(R.drawable.placeholderimage);
+                        System.out.println("success to parse owner information");
+                    }
                 } else {
-                    // Handle the case where owner information could not be parsed
                     Toast.makeText(MainActivity.this, "Failed to parse owner information", Toast.LENGTH_SHORT).show();
                 }
-
             }
-
             @Override
             public void onFailure(String errorMessage) {
-                // Handle the failure/error case and display an appropriate message
                 Toast.makeText(MainActivity.this, "Failed to fetch owner information", Toast.LENGTH_SHORT).show();
             }
         });

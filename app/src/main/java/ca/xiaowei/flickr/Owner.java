@@ -5,10 +5,20 @@ public class Owner {
     private String authorName;
     private String authorPortraitUrl;
 
-    public Owner(String username,String authorName, String authorPortraitUrl) {
+    private String displayName;
+
+    public Owner(String username,String authorName,String authorPortraitUrl) {
         this.username = username;
         this.authorName = authorName;
         this.authorPortraitUrl = authorPortraitUrl;
+    }
+    public Owner(String displayName,String authorPortraitUrl){
+        this.displayName = displayName;
+        this.authorPortraitUrl = authorPortraitUrl;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public String getUsername() {

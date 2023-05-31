@@ -30,9 +30,9 @@
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/redcar"
+
             android:layout_gravity="center"
-            android:background="@drawable/portrait_circle_background"/>
+            android:src="@drawable/portrait_circle_background" />
 
         <TextView
             android:id="@+id/author_name"
@@ -42,7 +42,7 @@
             android:layout_margin="16dp"
             android:text="@string/author_name"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="25sp" />
     </LinearLayout>
     </FrameLayout>
 

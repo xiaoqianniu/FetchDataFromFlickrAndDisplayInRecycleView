@@ -87,12 +87,24 @@ public class JSONParser {
             String iconServer = personObject.getString("iconserver");
             String iconFarm = personObject.getString("iconfarm");
             String authorPortraitUrl = "https://farm" + iconFarm + ".staticflickr.com/" + iconServer + "/buddyicons/" + personObject.getString("nsid") + ".jpg";
-
+            String displayName = (authorRealName != null && !authorRealName.isEmpty()) ? authorRealName : authorName;
             // Create and return the Owner object
-            return new Owner(authorName, authorRealName, authorPortraitUrl);
+            return new Owner(displayName, authorPortraitUrl);
         } catch (JSONException e) {
             e.printStackTrace();
             return null; // Return null to indicate parsing failure
+        }
+    }
+
+    private String getOwnerPortraitUrl(JSONObject personObject) throws JSONException {
+        String iconServer = personObject.getString("iconserver");
+        String iconFarm = personObject.getString("iconfarm");
+        String nsid = personObject.getString("nsid");
+
+        if (!iconServer.equals("0")) {
+            return "https://farm" + iconFarm + ".staticflickr.com/" + iconServer + "/buddyicons/" + nsid + ".jpg";
+        } else {
+            return "https://www.flickr.com/images/buddyicon.gif"; // A default placeholder image if the owner has no portrait
         }
     }
 }
