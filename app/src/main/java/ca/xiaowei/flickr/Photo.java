@@ -118,4 +118,13 @@ public  Photo(String id, String owner){
 //        http://farm{farm}.static.flickr.com/{server}/{id}_{secret}.jpg
         return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
     }
+    public String getImageUrlTwo() {
+        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
+    }
+    public String getImageUrlThree() {
+        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
+    }
+    public String getImageUrlFour() {
+        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
+    }
 }

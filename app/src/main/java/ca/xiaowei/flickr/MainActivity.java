@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -14,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CustomRecycleViewAdapter customRecycleViewAdapter;
     ArrayList<Photo> listOfPhotos;
+    ImageView head_imageView, author_portrait;
+    TextView author_name;
 
 
     @Override
@@ -47,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setAdapter(customRecycleViewAdapter);
+
+        head_imageView = findViewById(R.id.header_imageView);
+        author_portrait = findViewById(R.id.author_portrait);
+        author_name = findViewById(R.id.author_name);
     }
 
     private void fetchPhotosFromAPI() {
@@ -66,9 +75,22 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("listOfPhotos size: " + listOfPhotos.size());
 
                     customRecycleViewAdapter.notifyDataSetChanged();
+
+                    if (!listOfPhotos.isEmpty()) {
+                        Photo firstPhoto = listOfPhotos.get(0);
+                        String head_url = firstPhoto.getImageUrl();
+                        Picasso.get()
+                                .load(head_url)
+                                .placeholder(R.drawable.placeholderimage)
+                                .into(head_imageView);
+                        String ownerID = firstPhoto.getOwner();
+                        fetchOwnerInfo(ownerID);
+                    }
+
                 } else {
                     System.out.println("No photos fetched");
                 }
+
             }
 
             @Override
@@ -79,4 +101,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    private void fetchOwnerInfo(String ownerID) {
+        String apiUrl = URLManager.getOwnerInfoUrl(ownerID);
+        // Make an API request to fetch owner information using the owner ID
+        // You can use the same API client and callback interface as in fetchPhotosFromAPI()
+        APIClient apiClient = new APIClient(this);
+        apiClient.fetchData(apiUrl, new ApiCallbackInterface() {
+            @Override
+            public void onSuccess(String response) {
+                JSONParser jsonParser = new JSONParser();
+
+                Owner owner = jsonParser.parseOwnerInfo(response);
+                System.out.println(".................." + owner);
+
+                if (owner != null) {
+                    // Retrieve the author name and author portrait URL from the parsed Owner object
+                    String authorName = owner.getAuthorName();
+                    String authorPortraitUrl = owner.getAuthorPortraitUrl();
+
+                    // Update the corresponding views with the retrieved information
+                    author_name.setText(authorName);
+                    Picasso.get()
+                            .load(authorPortraitUrl)
+                            .placeholder(R.drawable.placeholderimage)
+                            .into(author_portrait);
+                    System.out.println("success to parse owner information");
+                } else {
+                    // Handle the case where owner information could not be parsed
+                    Toast.makeText(MainActivity.this, "Failed to parse owner information", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle the failure/error case and display an appropriate message
+                Toast.makeText(MainActivity.this, "Failed to fetch owner information", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

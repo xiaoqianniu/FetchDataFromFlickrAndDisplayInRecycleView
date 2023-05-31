@@ -71,5 +71,28 @@ public class JSONParser {
         return null;
     }
 
+    public Owner parseOwnerInfo(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONObject personObject = jsonObject.getJSONObject("person");
+            String authorName = personObject.getJSONObject("username").getString("_content");
 
+            // Check if the owner has a real name and retrieve it if available
+            String authorRealName = "";
+            if (personObject.has("realname")) {
+                authorRealName = personObject.getJSONObject("realname").getString("_content");
+            }
+
+            // Construct the author portrait URL using the iconserver and iconfarm values
+            String iconServer = personObject.getString("iconserver");
+            String iconFarm = personObject.getString("iconfarm");
+            String authorPortraitUrl = "https://farm" + iconFarm + ".staticflickr.com/" + iconServer + "/buddyicons/" + personObject.getString("nsid") + ".jpg";
+
+            // Create and return the Owner object
+            return new Owner(authorName, authorRealName, authorPortraitUrl);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null; // Return null to indicate parsing failure
+        }
+    }
 }

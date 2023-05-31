@@ -1,8 +1,6 @@
 package ca.xiaowei.flickr;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycleViewAdapter.ViewHolder> {
@@ -40,32 +36,62 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
     @Override
     public void onBindViewHolder(@NonNull CustomRecycleViewAdapter.ViewHolder holder, int position) {
         Photo photos = listOfPhotos.get(position);
-        String url = photos.getImageUrl();
-        System.out.println(url);
-        Picasso.get().setLoggingEnabled(true);
-        Picasso.get()
-                .load(url)
-                .placeholder(R.drawable.placeholderimage)
-                .resize(80,80)
-                .into(holder.imageView);
 
-        holder.cell_owner.setText(photos.getOwner());
+        int cellPosition = position * 4;
+        ImageView[] imageViews = {
+                holder.imageViewOne,
+                holder.imageViewTwo,
+                holder.imageViewThree,
+                holder.imageViewFour
+        };
+
+        for (int i = 0; i < imageViews.length; i++) {
+            int photoPosition = cellPosition + i;
+
+            if (photoPosition < listOfPhotos.size()) {
+                Photo photo = listOfPhotos.get(photoPosition);
+                String imageUrl = photo.getImageUrl();
+
+                Picasso.get()
+                        .load(imageUrl)
+                        .placeholder(R.drawable.placeholderimage)
+                        .into(imageViews[i]);
+            } else {
+                // If there are no more photos, clear the ImageView
+                imageViews[i].setImageDrawable(null);
+            }
+        }
+
+//        holder.cell_owner.setText(photos.getOwner());
 
     }
-
+    private int getNextValidPosition(int position) {
+        // Check if the position is out of bounds, if so, loop back to the beginning
+        if (position >= listOfPhotos.size()) {
+            return position % listOfPhotos.size();
+        } else {
+            return position;
+        }
+    }
     @Override
     public int getItemCount() {
         return listOfPhotos.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
+        private ImageView imageViewOne;
+        private ImageView imageViewTwo;
+        private ImageView imageViewThree;
+        private ImageView imageViewFour;
         private TextView cell_owner;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.cell_imageView);
-            cell_owner = itemView.findViewById(R.id.cell_owner);
+            imageViewOne = itemView.findViewById(R.id.cell_imageViewOne);
+            imageViewTwo = itemView.findViewById(R.id.cell_imageViewTwo);
+            imageViewThree = itemView.findViewById(R.id.cell_imageViewThree);
+            imageViewFour = itemView.findViewById(R.id.cell_imageViewFour);
+//            cell_owner = itemView.findViewById(R.id.cell_owner);
         }
 
     }
@@ -77,4 +103,5 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
     public void clear() {
         listOfPhotos.clear();
     }
+
 }

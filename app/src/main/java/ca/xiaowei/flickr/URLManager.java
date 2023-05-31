@@ -55,4 +55,16 @@ public class URLManager {
         }
         return url;
     }
+
+    public static String getOwnerInfoUrl(String ownerID) {
+        // Construct the URL string for fetching owner information using the owner ID
+        String baseUrl = "https://api.flickr.com/services/rest/";
+        String method = "flickr.people.getInfo";
+        String apiKey = "b6395da02b7b99dccae5051360c27ff1"; // Replace with your Flickr API key
+
+        // Build the complete URL string
+        String url = baseUrl + "?method=" + method + "&api_key=" + apiKey + "&user_id=" + ownerID + "&format=json&nojsoncallback=1";
+        System.out.println("author name url:......."+url);
+        return url;
+    }
 }

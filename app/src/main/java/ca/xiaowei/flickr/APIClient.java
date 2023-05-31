@@ -25,6 +25,7 @@ public class APIClient {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        System.out.println("Response: " + response.toString()); // Print the response for debugging
                         callback.onSuccess(response.toString());
                     }
                 },
