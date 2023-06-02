@@ -1,4 +1,4 @@
-package ca.xiaowei.flickr;
+package ca.xiaowei.flickr.Utils;
 
 public interface ApiCallbackInterface {
 

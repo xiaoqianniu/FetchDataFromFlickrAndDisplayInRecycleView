@@ -1,4 +1,4 @@
-package ca.xiaowei.flickr;
+package ca.xiaowei.flickr.Utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -11,6 +11,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import ca.xiaowei.flickr.Model.Owner;
+import ca.xiaowei.flickr.Model.Photo;
 
 public class JSONParser {
 
@@ -53,12 +56,9 @@ public class JSONParser {
                 String server = currentJSONPhotoObject.getString("server");
                 String farm = currentJSONPhotoObject.getString("farm");
                 String title = currentJSONPhotoObject.getString("title");
-                int isPublic = currentJSONPhotoObject.getInt("ispublic");
-                int isFriend = currentJSONPhotoObject.getInt("isfriend");
-                int isFamily = currentJSONPhotoObject.getInt("isfamily");
 
                 // Create a Photo object and add it to your list
-                Photo photo = new Photo(id, owner, secret, server, farm, title, isPublic == 1, isFriend == 1, isFamily == 1);
+                Photo photo = new Photo(id, owner, secret, server, farm, title);
                 listOfPhotos.add(photo);
                 System.out.println("listofphots:"+listOfPhotos);
             }

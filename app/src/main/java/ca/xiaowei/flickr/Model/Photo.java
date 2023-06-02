@@ -1,4 +1,4 @@
-package ca.xiaowei.flickr;
+package ca.xiaowei.flickr.Model;
 
 public class Photo {
     private String id;
@@ -7,14 +7,14 @@ public class Photo {
     private String server;
     private String farm;
     private String title;
-    private boolean isPublic;
-    private boolean isFriend;
-    private boolean isFamily;
+    private String imageUrl;
+
 public  Photo(String id, String owner){
     this.id = id;
     this.owner = owner;
 
 }
+public Photo(){}
     public Photo(String id, String secret, String server, String farm) {
         this.id = id;
         this.secret = secret;
@@ -22,16 +22,13 @@ public  Photo(String id, String owner){
         this.farm = farm;
     }
     public Photo(String id,String owner, String secret, String server,String farm,
-                 String title,boolean isPublic,boolean isFriend,boolean isFamily){
+                 String title){
         this.id = id;
         this.owner = owner;
         this.secret = secret;
         this.server = server;
         this.farm = farm;
         this.title = title;
-        this.isPublic = isPublic;
-        this.isFriend = isFriend;
-        this.isFamily = isFamily;
     }
 
     public void setId(String id) {
@@ -82,18 +79,6 @@ public  Photo(String id, String owner){
         return title;
     }
 
-    public void setFamily(boolean family) {
-        isFamily = family;
-    }
-
-    public void setFriend(boolean friend) {
-        isFriend = friend;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
-    }
-
     @Override
     public String toString() {
         return "Photo{" +
@@ -102,10 +87,7 @@ public  Photo(String id, String owner){
                 ", secret='" + secret + '\'' +
                 ", server='" + server + '\'' +
                 ", farm=" + farm +
-                ", title='" + title + '\'' +
-                ", isPublic=" + isPublic +
-                ", isFriend=" + isFriend +
-                ", isFamily=" + isFamily +
+                ", title='" + title +
                 '}';
     }
 
@@ -118,13 +100,8 @@ public  Photo(String id, String owner){
 //        http://farm{farm}.static.flickr.com/{server}/{id}_{secret}.jpg
         return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
     }
-    public String getImageUrlTwo() {
-        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
-    }
-    public String getImageUrlThree() {
-        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
-    }
-    public String getImageUrlFour() {
-        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

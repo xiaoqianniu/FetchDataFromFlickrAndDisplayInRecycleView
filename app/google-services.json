@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "476211752220",
+    "project_id": "react-next-login",
+    "storage_bucket": "react-next-login.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476211752220:android:f4bcfb24992ebdb94cded9",
+        "android_client_info": {
+          "package_name": "ca.xiaowei.flickr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476211752220-npb6q9e8a4997hk8c9vc9eonq93hqsr0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrUU4oEwyjSIUDGH0kA_QlSioVXqrolPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476211752220-7524lasjp8qin21oougg1kc6uun4ffe6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

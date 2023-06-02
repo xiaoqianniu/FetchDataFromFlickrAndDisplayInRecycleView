@@ -4,25 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import ca.xiaowei.flickr.DB.DBOpenHelper;
+import ca.xiaowei.flickr.Model.Owner;
+import ca.xiaowei.flickr.Model.Photo;
+import ca.xiaowei.flickr.Utils.APIClient;
+import ca.xiaowei.flickr.Utils.ApiCallbackInterface;
+import ca.xiaowei.flickr.Utils.CircleTransform;
+import ca.xiaowei.flickr.Utils.JSONParser;
+import ca.xiaowei.flickr.Utils.URLManager;
 
 //	PhotoShow
 //Key:
@@ -30,26 +33,28 @@ import java.util.ArrayList;
 //
 //Secret:
 //b36b56655659540e
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     RecyclerView recyclerView;
     CustomRecycleViewAdapter customRecycleViewAdapter;
     ArrayList<Photo> listOfPhotos;
     ImageView head_imageView, author_portrait;
     TextView author_name;
-
-
+    Button saveDbBtn, fetchFromDbBtn;
+    private Dialog imageDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initializeViews();
         fetchPhotosFromAPI();
+
     }
 
     private void initializeViews() {
         listOfPhotos = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
-        customRecycleViewAdapter = new CustomRecycleViewAdapter(this, listOfPhotos);
+        customRecycleViewAdapter = new CustomRecycleViewAdapter(this, listOfPhotos,imageDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setAdapter(customRecycleViewAdapter);
@@ -57,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
         head_imageView = findViewById(R.id.header_imageView);
         author_portrait = findViewById(R.id.author_portrait);
         author_name = findViewById(R.id.author_name);
+        saveDbBtn = findViewById(R.id.saveToDB);
+        saveDbBtn.setOnClickListener(this);
+        fetchFromDbBtn = findViewById(R.id.fetchFromDB);
+        fetchFromDbBtn.setOnClickListener(this);
+        imageDialog = new Dialog(this);
+        imageDialog.setContentView(R.layout.dialog_large_image);
     }
 
     private void fetchPhotosFromAPI() {
@@ -73,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
 
                     listOfPhotos.clear();
                     listOfPhotos.addAll(fetchedPhotos);
+
                     System.out.println("listOfPhotos size: " + listOfPhotos.size());
 
                     customRecycleViewAdapter.notifyDataSetChanged();
 
                     if (!listOfPhotos.isEmpty()) {
+
                         Photo firstPhoto = listOfPhotos.get(0);
                         String head_url = firstPhoto.getImageUrl();
                         Picasso.get()
@@ -120,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     String authorName = owner.getDisplayName();
                     String authorPortraitUrl = owner.getAuthorPortraitUrl();
 
-                    System.out.println("author name ///////////"+ authorName);
+                    System.out.println("author name ///////////" + authorName);
 
                     // Update the corresponding views with the retrieved information
                     author_name.setText(authorName);
@@ -139,10 +152,51 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Failed to parse owner information", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(String errorMessage) {
                 Toast.makeText(MainActivity.this, "Failed to fetch owner information", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.saveToDB) {
+            savePhotosToDB(listOfPhotos);
+        } else if (v.getId() == R.id.fetchFromDB) {
+            FetchPhotosFromDB();
+
+        }
+    }
+
+    private void savePhotosToDB(List<Photo> listOfPhotos) {
+        DBOpenHelper dbHelper = new DBOpenHelper(this);
+
+        for (Photo photo : listOfPhotos) {
+            dbHelper.addPhoto(photo);
+        }
+
+        Toast.makeText(MainActivity.this, "Saved to SQLite database successfully", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void FetchPhotosFromDB() {
+//todo:need to modify this fuction
+        DBOpenHelper dbHelper = new DBOpenHelper(this);
+        List<Photo> fetchedPhotos = dbHelper.getAllPhotos();
+        System.out.println("fetchedPhotos:" + fetchedPhotos);
+        if (fetchedPhotos != null) {
+            listOfPhotos.clear();
+            for (Photo photo : fetchedPhotos) {
+                String imageUrl = "https://farm" + photo.getFarm() + ".static.flickr.com/" + photo.getServer() + "/" + photo.getId() + "_" + photo.getSecret() + ".jpg";
+                Photo newPhoto = new Photo(photo.getId(), photo.getServer(), photo.getSecret(), photo.getFarm());
+                newPhoto.setImageUrl(imageUrl);
+                listOfPhotos.add(newPhoto);
+            }
+            customRecycleViewAdapter.notifyDataSetChanged();
+
+        }
+    }
+
 }

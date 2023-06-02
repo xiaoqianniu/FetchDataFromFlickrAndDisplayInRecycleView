@@ -1,8 +1,6 @@
-package ca.xiaowei.flickr;
+package ca.xiaowei.flickr.Utils;
 
 import android.net.Uri;
-
-import java.net.URL;
 
 public class URLManager {
 
