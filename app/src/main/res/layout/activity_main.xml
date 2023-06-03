@@ -47,17 +47,33 @@
     </FrameLayout>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center">
     <Button
         android:id="@+id/saveToDB"
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:text="@string/savetodb"/>
+        android:text="@string/save"/>
     <Button
         android:id="@+id/fetchFromDB"
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:text="@string/fetchfromdb"/>
+        android:text="@string/fetch"/>
+    <Button
+        android:id="@+id/btnCamera"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:text="@string/camera" />
+    <Button
+        android:id="@+id/uploadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload"
+        android:onClick="onUploadButtonClick" />
+
 </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

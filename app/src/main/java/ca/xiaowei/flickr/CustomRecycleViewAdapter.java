@@ -93,6 +93,20 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
                     imageDialog.show();
                     return true;
                 });
+
+                // Set an OnClickListener for each ImageView
+                imageViews[i].setOnClickListener(v -> {
+                    // Create an Intent to start the ImageDetailActivity
+                    Intent intent = new Intent(context, ImageDetailActivity.class);
+
+                    // Pass the image details to the ImageDetailActivity
+                    Photo onePhoto = listOfPhotos.get(photoPosition);
+                    intent.putExtra("onePhoto", onePhoto);
+
+                    // Start the ImageDetailActivity
+                    context.startActivity(intent);
+                });
+
             } else {
                 // If there are no more photos, clear the ImageView
                 imageViews[i].setImageDrawable(null);

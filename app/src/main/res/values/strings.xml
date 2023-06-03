@@ -3,4 +3,9 @@
     <string name="author_name">Author Name</string>
     <string name="savetodb">SaveToDB</string>
     <string name="fetchfromdb">FetchFromDB</string>
+    <string name="back">Back</string>
+    <string name="camera_roll">Camera Roll</string>
+    <string name="save">Save</string>
+    <string name="fetch">Fetch</string>
+    <string name="camera">Camera</string>
 </resources>

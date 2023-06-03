@@ -1,6 +1,8 @@
 package ca.xiaowei.flickr.Model;
 
-public class Owner {
+import java.io.Serializable;
+
+public class Owner implements Serializable {
     private String username;
     private String authorName;
     private String authorPortraitUrl;

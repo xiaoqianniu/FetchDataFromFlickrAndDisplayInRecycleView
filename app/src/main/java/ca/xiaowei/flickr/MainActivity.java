@@ -1,11 +1,16 @@
 package ca.xiaowei.flickr;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +18,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.type.Date;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ca.xiaowei.flickr.DB.DBOpenHelper;
 import ca.xiaowei.flickr.Model.Owner;
@@ -39,8 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Photo> listOfPhotos;
     ImageView head_imageView, author_portrait;
     TextView author_name;
-    Button saveDbBtn, fetchFromDbBtn;
+    Button saveDbBtn, fetchFromDbBtn, cameraBtn;
     private Dialog imageDialog;
+    private static final int PHOTO_CAPTURE_REQUEST_CODE = 1001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initializeViews() {
         listOfPhotos = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
-        customRecycleViewAdapter = new CustomRecycleViewAdapter(this, listOfPhotos,imageDialog);
+        customRecycleViewAdapter = new CustomRecycleViewAdapter(this, listOfPhotos, imageDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setAdapter(customRecycleViewAdapter);
@@ -66,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         saveDbBtn.setOnClickListener(this);
         fetchFromDbBtn = findViewById(R.id.fetchFromDB);
         fetchFromDbBtn.setOnClickListener(this);
+        cameraBtn = findViewById(R.id.btnCamera);
+        cameraBtn.setOnClickListener(this);
         imageDialog = new Dialog(this);
         imageDialog.setContentView(R.layout.dialog_large_image);
     }
@@ -167,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.getId() == R.id.fetchFromDB) {
             FetchPhotosFromDB();
 
+        } else if (v.getId() == R.id.btnCamera) {
+            goToCamera();
         }
     }
 
@@ -199,4 +215,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void goToCamera() {
+        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+        startActivity(intent);
+    }
 }
