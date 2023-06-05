@@ -23,7 +23,6 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
         initialize();
-
         getMyIntent();
     }
 

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ca.xiaowei.flickr.Model.Photo;
@@ -26,6 +27,10 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
     private Context context;
     private List<Photo> listOfPhotos;
     private Dialog imageDialog;
+
+    public CustomRecycleViewAdapter(List<Photo> listOfPhotos){
+        this.listOfPhotos = listOfPhotos;
+    }
 
     public CustomRecycleViewAdapter(Context context, List<Photo> listOfPhotos,Dialog imageDialog) {
         this.context = context;
@@ -153,5 +158,8 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
     public void clear() {
         listOfPhotos.clear();
     }
-
+    public void addPhoto(Photo photo) {
+        listOfPhotos.add(photo);
+        notifyDataSetChanged();
+    }
 }

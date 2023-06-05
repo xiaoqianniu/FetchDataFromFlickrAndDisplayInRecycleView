@@ -8,4 +8,9 @@
     <string name="save">Save</string>
     <string name="fetch">Fetch</string>
     <string name="camera">Camera</string>
+    <string-array name="grid">
+        <item>Simple</item>
+        <item>Horizontal</item>
+        <item>Two Col</item>
+    </string-array>
 </resources>

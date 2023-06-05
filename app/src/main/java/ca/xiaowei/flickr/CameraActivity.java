@@ -15,7 +15,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,16 +28,28 @@ import java.util.Locale;
 
 import android.Manifest;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import ca.xiaowei.flickr.Model.Photo;
+import ca.xiaowei.flickr.UploadImages.ImageUploader;
+
 public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
     private Camera camera;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
     private String currentPhotoPath;
+
+    private ArrayList<Photo> uploadedPhotosList;
+
+    private CustomRecycleViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        uploadedPhotosList = new ArrayList<>();
+adapter = new CustomRecycleViewAdapter(uploadedPhotosList);
 
         surfaceView = findViewById(R.id.surfaceView);
         // Request camera permission if not granted
@@ -171,5 +186,35 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         mediaScanIntent.setData(contentUri);
         sendBroadcast(mediaScanIntent);
     }
+//    public void onUploadButtonClick(View view) {
+//        if (currentPhotoPath != null) {
+//            ImageUploader imageUploader = new ImageUploader(this);
+//
+//            String uploadUrl = "YOUR_UPLOAD_URL";
+//            String imagePath = currentPhotoPath;
+//
+//            imageUploader.uploadImage(uploadUrl, imagePath, new Response.Listener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//                    Photo photo = new Photo();
+//                    photo.setImageUrl(response);
+//
+//                    // Pass the uploaded photo back to MainActivity using an Intent
+//                    Intent intent = new Intent();
+//                    intent.putExtra("uploadedPhoto", photo);
+//                    setResult(RESULT_OK, intent);
+//                    finish(); // Finish CameraActivity and return to MainActivity
+//                }
+//            }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    Toast.makeText(CameraActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        } else {
+//            Toast.makeText(this, "No image to upload", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
 
 }
